@@ -20,3 +20,9 @@ On Windows
 ■ リポジトリ
 https://github.com/MuraAtVwnet/RemoveCert
 git@github.com:MuraAtVwnet/RemoveCert.git
+
+
+■ Web Site
+PowerShell で有効期限が迫った証明書を探す
+http://www.vwnet.jp/Windows/WS19/2021030401/AutoEnrollment64.htm
+
