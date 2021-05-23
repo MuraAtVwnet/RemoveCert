@@ -1,7 +1,9 @@
 ﻿###############################################
 # 期限の切れた証明書を削除する
 ###############################################
-function RemoveExpiredCertificate([string]$ThumbprintString, [switch]$CheckOnly){
+function RemoveExpiredCertificate{
+	[string]$ThumbprintString = $Args[0]
+	[switch]$CheckOnly = $Args[1]
 	$ThumbprintOrg = $ThumbprintString
 	$Thumbprint = $ThumbprintOrg -replace " ",""
 	$Certs = dir Cert:\LocalMachine\my
@@ -20,10 +22,10 @@ function RemoveExpiredCertificate([string]$ThumbprintString, [switch]$CheckOnly)
 
 
 function RemoveCert([String]$ComputerName, [String]$ThumbprintString){
-	Invoke-Command -ScriptBlock $function:RemoveExpiredCertificate -ComputerName $ComputerName -ArgumentList $ThumbprintString
+	Invoke-Command -ScriptBlock $function:RemoveExpiredCertificate -ComputerName $ComputerName -ArgumentList $ThumbprintString, $false
 }
 
 
 function CheckCert([String]$ComputerName, [String]$ThumbprintString){
-	Invoke-Command -ScriptBlock $function:RemoveExpiredCertificate -ComputerName $ComputerName -ArgumentList $ThumbprintString, "-CheckOnly"
+	Invoke-Command -ScriptBlock $function:RemoveExpiredCertificate -ComputerName $ComputerName -ArgumentList $ThumbprintString, $true
 }
