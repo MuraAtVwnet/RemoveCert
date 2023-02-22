@@ -5,11 +5,14 @@
 ■ 使い方
 PowerShell プロンプトで以下コマンド入力すると、証明書の期限を確認し、期限が切れていたら削除をします
 
-RemoveCert リモートコンピューター名 証明書の拇印
+RemoveCert 証明書の拇印 リモートコンピューター名
 
 削除はせずに、証明書の確認だけをする場合は、CheckCert を使います
 
-CheckCert リモートコンピューター名 証明書の拇印
+CheckCert 証明書の拇印 リモートコンピューター名
+
+
+証明書の拇印だけを渡すと、localhost を対象にします
 
 
 ■ インストールの仕方
@@ -22,7 +25,7 @@ uninstall.ps1 を実行して下さい
 
 ■ 動作確認環境
 Windows PowerShell 5.1 On Windows
-
+PowerShell Core 7.3.2 On Windows
 
 ■ リポジトリ
 https://github.com/MuraAtVwnet/RemoveCert

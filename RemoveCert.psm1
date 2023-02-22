@@ -21,11 +21,21 @@ function RemoveExpiredCertificate{
 }
 
 
-function RemoveCert([String]$ComputerName, [String]$ThumbprintString){
-	Invoke-Command -ScriptBlock $function:RemoveExpiredCertificate -ComputerName $ComputerName -ArgumentList $ThumbprintString, $false
+function RemoveCert([String]$ThumbprintString, [String]$ComputerName){
+	if($ComputerName -eq [String]$null){
+		RemoveExpiredCertificate $ThumbprintString $false
+	}
+	else{
+		Invoke-Command -ScriptBlock $function:RemoveExpiredCertificate -ComputerName $ComputerName -ArgumentList $ThumbprintString, $false
+	}
 }
 
 
-function CheckCert([String]$ComputerName, [String]$ThumbprintString){
-	Invoke-Command -ScriptBlock $function:RemoveExpiredCertificate -ComputerName $ComputerName -ArgumentList $ThumbprintString, $true
+function CheckCert([String]$ThumbprintString, [String]$ComputerName ){
+	if($ComputerName -eq [String]$null){
+		RemoveExpiredCertificate $ThumbprintString $true
+	}
+	else{
+		Invoke-Command -ScriptBlock $function:RemoveExpiredCertificate -ComputerName $ComputerName -ArgumentList $ThumbprintString, $true
+	}
 }
