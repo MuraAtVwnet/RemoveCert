@@ -6,7 +6,7 @@ function RemoveExpiredCertificate{
 	[switch]$CheckOnly = $Args[1]
 	$ThumbprintOrg = $ThumbprintString
 	$Thumbprint = $ThumbprintOrg -replace " ",""
-	$Certs = dir Cert:\LocalMachine\my
+	$Certs = Get-ChildItem Cert:\LocalMachine -Recurse
 	[array]$Tergets = $Certs |? Thumbprint -eq $Thumbprint
 	$Tergets | Select PSParentPath, Issuer, NotAfter
 	if( -not $CheckOnly ){
