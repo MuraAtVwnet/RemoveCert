@@ -61,3 +61,31 @@ function ListExpiredCert([String]$ComputerName){
 		Invoke-Command -ScriptBlock $function:ListExpiredCertificate -ComputerName $ComputerName
 	}
 }
+
+###############################################
+# 期限の切れた証明書を削除する
+###############################################
+function RemoveExpiredCertificate{
+	$ToDay = Get-Date
+	[array]$Certs = Get-ChildItem Cert:\LocalMachine -Recurse
+	[array]$Certs = $Certs |? NotAfter -ne $null
+	[array]$Tergets = $Certs |? NotAfter -lt $ToDay | Sort-Object NotAfter
+	$Tergets | FT NotAfter, Issuer, Thumbprint
+
+	foreach( $Terget in $Tergets ){
+		if( $Terget.NotAfter -lt (Get-Date) ){
+			$CertPath = Join-path $Terget.PSParentPath $Terget.PSChildName
+			Remove-Item $CertPath
+		}
+	}
+}
+
+
+function RemoveExpiredCert([String]$ComputerName){
+	if($ComputerName -eq [String]$null){
+		RemoveExpiredCertificate
+	}
+	else{
+		Invoke-Command -ScriptBlock $function:RemoveExpiredCertificate -ComputerName $ComputerName
+	}
+}
