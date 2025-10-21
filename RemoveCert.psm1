@@ -1,7 +1,7 @@
 ﻿###############################################
 # 期限の切れた証明書を削除する
 ###############################################
-function RemoveExpiredCertificate{
+function RemoveExpiredCertificateCore{
 	[string]$ThumbprintString = $Args[0]
 	[switch]$CheckOnly = $Args[1]
 	$ThumbprintOrg = $ThumbprintString
@@ -23,20 +23,20 @@ function RemoveExpiredCertificate{
 
 function RemoveCert([String]$ThumbprintString, [String]$ComputerName){
 	if($ComputerName -eq [String]$null){
-		RemoveExpiredCertificate $ThumbprintString $false
+		RemoveExpiredCertificateCore $ThumbprintString $false
 	}
 	else{
-		Invoke-Command -ScriptBlock $function:RemoveExpiredCertificate -ComputerName $ComputerName -ArgumentList $ThumbprintString, $false
+		Invoke-Command -ScriptBlock $function:RemoveExpiredCertificateCore -ComputerName $ComputerName -ArgumentList $ThumbprintString, $false
 	}
 }
 
 
 function CheckCert([String]$ThumbprintString, [String]$ComputerName ){
 	if($ComputerName -eq [String]$null){
-		RemoveExpiredCertificate $ThumbprintString $true
+		RemoveExpiredCertificateCore $ThumbprintString $true
 	}
 	else{
-		Invoke-Command -ScriptBlock $function:RemoveExpiredCertificate -ComputerName $ComputerName -ArgumentList $ThumbprintString, $true
+		Invoke-Command -ScriptBlock $function:RemoveExpiredCertificateCore -ComputerName $ComputerName -ArgumentList $ThumbprintString, $true
 	}
 }
 
@@ -44,7 +44,7 @@ function CheckCert([String]$ThumbprintString, [String]$ComputerName ){
 ###############################################
 # 期限の切れた証明書をリストアップする
 ###############################################
-function ListExpiredCertificate{
+function ListExpiredCertificateCore{
 	$ToDay = Get-Date
 	[array]$Certs = Get-ChildItem Cert:\LocalMachine -Recurse
 	[array]$Certs = $Certs |? NotAfter -ne $null
@@ -55,17 +55,17 @@ function ListExpiredCertificate{
 
 function ListExpiredCert([String]$ComputerName){
 	if($ComputerName -eq [String]$null){
-		ListExpiredCertificate
+		ListExpiredCertificateCore
 	}
 	else{
-		Invoke-Command -ScriptBlock $function:ListExpiredCertificate -ComputerName $ComputerName
+		Invoke-Command -ScriptBlock $function:ListExpiredCertificateCore -ComputerName $ComputerName
 	}
 }
 
 ###############################################
 # 期限の切れた証明書を削除する
 ###############################################
-function RemoveAllExpiredCertificate{
+function RemoveAllExpiredCertificateCore{
 	$ToDay = Get-Date
 	[array]$Certs = Get-ChildItem Cert:\LocalMachine -Recurse
 	[array]$Certs = $Certs |? NotAfter -ne $null
@@ -83,9 +83,9 @@ function RemoveAllExpiredCertificate{
 
 function RemoveAllExpiredCert([String]$ComputerName){
 	if($ComputerName -eq [String]$null){
-		RemoveAllExpiredCertificate
+		RemoveAllExpiredCertificateCore
 	}
 	else{
-		Invoke-Command -ScriptBlock $function:RemoveAllExpiredCertificate -ComputerName $ComputerName
+		Invoke-Command -ScriptBlock $function:RemoveAllExpiredCertificateCore -ComputerName $ComputerName
 	}
 }
